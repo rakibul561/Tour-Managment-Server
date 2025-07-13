@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import {Server} from 'http';
 import mongoose from 'mongoose';
@@ -31,60 +32,60 @@ const startServer = async () =>{
 startServer();
 
 
-   process.on("SIGTERM", () =>{
-    console.log("SIGTERM signal recieved........ Server sutting Down");
+//    process.on("SIGTERM", () =>{
+//     console.log("SIGTERM signal recieved........ Server sutting Down");
 
-    if(server){
-        server.close(() =>{
-        process.exit(1)
+//     if(server){
+//         server.close(() =>{
+//         process.exit(1)
 
-        });
-    }
-    process.exit();
+//         });
+//     }
+//     process.exit();
     
-})
+// })
 
-   process.on("SIGINT", () =>{
-    console.log("SIGTERM signal recieved........ Server sutting Down");
+//    process.on("SIGINT", () =>{
+//     console.log("SIGTERM signal recieved........ Server sutting Down");
 
-    if(server){
-        server.close(() =>{
-        process.exit(1)
+//     if(server){
+//         server.close(() =>{
+//         process.exit(1)
 
-        });
-    }
-    process.exit();
+//         });
+//     }
+//     process.exit();
     
-})
+// })
 
    
 
 
  
-process.on("unhandledRejection", (err) =>{
-    console.log("unhandale Rejection detected........ Server sutting Down", err);
+// process.on("unhandledRejection", (err) =>{
+//     console.log("unhandale Rejection detected........ Server sutting Down", err);
 
-    if(server){
-        server.close(() =>{
-        process.exit(1)
+//     if(server){
+//         server.close(() =>{
+//         process.exit(1)
 
-        });
-    }
-    process.exit();
+//         });
+//     }
+//     process.exit();
     
-})
-process.on("uncaughtException", (err) =>{
-    console.log("uncaught Exception detected........ Server sutting Down", err);
+// })
+// process.on("uncaughtException", (err) =>{
+//     console.log("uncaught Exception detected........ Server sutting Down", err);
 
-    if(server){
-        server.close(() =>{
-        process.exit(1)
+//     if(server){
+//         server.close(() =>{
+//         process.exit(1)
 
-        });
-    }
-    process.exit();
+//         });
+//     }
+//     process.exit();
     
-})
+// })
  
 // unhandler rejection Error
 // Promise.reject(new Error (" I forgot to catch this promise "))

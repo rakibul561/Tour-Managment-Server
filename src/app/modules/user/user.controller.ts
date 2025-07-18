@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
-
+import { JwtPayload } from "jsonwebtoken";
 import { sendResponse } from "../../utils/sendResponse";
 import { catchAsync } from "../../utils/catchAysnc";
-import { date } from "zod";
 import { UserServices } from "./user.services";
-import { verifyToken } from "../../utils/jwt";
-import { envVars } from "../../../config/env";
-import { JwtPayload } from "jsonwebtoken";
-
 
 // const createUserFunction = async (req: Response, res: Response) => {
 
@@ -50,15 +46,14 @@ const createUser = catchAsync(async (req: Request, res: Response, next: NextFunc
     })
 })
 const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-   
     const userId = req.params.id;
-    // const token = req.headers.authorization;
+    // const token = req.headers.authorization
     // const verifiedToken = verifyToken(token as string, envVars.JWT_ACCESS_SECRET) as JwtPayload
-    const payload = req.body;
 
     const verifiedToken = req.user;
-    
-    const user = await UserServices.updateUser(userId, payload, verifiedToken)
+
+    const payload = req.body;
+    const user = await UserServices.updateUser(userId, payload, verifiedToken as JwtPayload)
 
     // res.status(httpStatus.CREATED).json({
     //     message: "User Created Successfully",
@@ -87,7 +82,6 @@ const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFun
         message: "All Users Retrieved Successfully",
         data: result.data,
         meta: result.meta
-      
     })
 })
 

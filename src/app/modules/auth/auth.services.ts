@@ -5,8 +5,8 @@ import { JwtPayload } from "jsonwebtoken";
 import AppError from "../../errorHelpers/AppError";
 import { IUser } from "../user/user.interface";
 import { User } from "../user/user.mdal";
-import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userToken";
 import { envVars } from "../../../config/env";
+import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userToken";
 
 
 const credentialsLogin = async (payload: Partial<IUser>) => {

@@ -2,7 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Request, Response } from "express";
 import expressSession from "express-session";
-import passport from "passport";
+import passport from "passport"; 
 
 import "../src/config/pasport";
 import { envVars } from "./config/env";

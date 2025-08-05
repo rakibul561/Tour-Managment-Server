@@ -5,6 +5,7 @@ import { TourController } from "./tour.controller";
 import { checkAuth } from "../../../middleware/checkAuth";
 import { createTourTypeZodSchema, createTourZodSchema, updateTourZodSchema } from "./tour.validation";
 import { validateRequest } from "../../../middleware/validateRequest";
+import { multerUpload } from "../../../config/multer.config";
 
 
 const router = express.Router();
@@ -34,6 +35,7 @@ router.get("/", TourController.getAllTours);
 router.post(
     "/create",
     checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    multerUpload.array("files"),
     validateRequest(createTourZodSchema),
     TourController.createTour
 );

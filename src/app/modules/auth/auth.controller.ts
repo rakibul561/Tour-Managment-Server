@@ -30,7 +30,7 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response, next: Ne
             // ✅✅✅✅
             // return next(err)
             // console.log("from err");
-            return next(new AppError(401, err))
+            return next(new AppError(err.statusCode || 401 , err.message))
         }
 
         if (!user) {
@@ -115,6 +115,24 @@ const logout = catchAsync(async (req: Request, res: Response, next: NextFunction
         data: null,
     })
 })
+
+ const changePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    const newPassword = req.body.newPassword;
+    const oldPassword = req.body.oldPassword;
+    const decodedToken = req.user
+
+    await AuthServices.resetPassword(oldPassword, newPassword, decodedToken as JwtPayload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Password Changed Successfully",
+        data: null,
+    })
+})
+
+
 const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
     const newPassword = req.body.newPassword;
@@ -130,6 +148,24 @@ const resetPassword = catchAsync(async (req: Request, res: Response, next: NextF
         data: null,
     })
 })
+
+
+const setPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    const decodedToken = req.user as JwtPayload
+    const { password } = req.body;
+
+    await AuthServices.setPassword(decodedToken.userId, password);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Password Changed Successfully",
+        data: null,
+    })
+})
+
+
 const googleCallbackController = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
     let redirectTo = req.query.state ? req.query.state as string : ""
@@ -164,5 +200,7 @@ export const AuthControllers = {
     getNewAccessToken,
     logout,
     resetPassword,
+    setPassword,
+    changePassword,
     googleCallbackController
 }

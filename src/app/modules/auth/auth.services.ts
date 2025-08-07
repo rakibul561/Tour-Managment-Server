@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import bcryptjs from "bcryptjs";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import AppError from "../../errorHelpers/AppError";
-import { IUser } from "../user/user.interface";
+import { IAuthProvider, IUser } from "../user/user.interface";
 import { User } from "../user/user.mdal";
 import { envVars } from "../../../config/env";
 import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userToken";
@@ -54,7 +55,7 @@ const getNewAccessToken = async (refreshToken: string) => {
     }
 
 }
-const resetPassword = async (oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
+const changePassword = async (oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
 
     const user = await User.findById(decodedToken.userId)
 
@@ -69,11 +70,50 @@ const resetPassword = async (oldPassword: string, newPassword: string, decodedTo
 
 
 }
+const resetPassword = async (oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
+
+    return {}
+
+
+}
+const setPassword = async (userId: string, plainPassword: string) => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new AppError(404, "User not found");
+    }
+
+    if (user.password && user.auths.some(providerObject => providerObject.provider === "google")) {
+        throw new AppError(httpStatus.BAD_REQUEST, "You have already set you password. Now you can change the password from your profile password update")
+    }
+
+    const hashedPassword = await bcryptjs.hash(
+        plainPassword,
+        Number(envVars.BCRYPT_SALT_ROUND)
+    )
+
+    const credentialProvider: IAuthProvider = {
+        provider: "credentials",
+        providerId: user.email
+    }
+
+    const auths: IAuthProvider[] = [...user.auths, credentialProvider]
+
+    user.password = hashedPassword
+
+    user.auths = auths
+
+    await user.save()
+
+}
+
 
 //user - login - token (email, role, _id) - booking / payment / booking / payment cancel - token 
 
 export const AuthServices = {
     credentialsLogin,
     getNewAccessToken,
-    resetPassword
+    resetPassword,
+    changePassword,
+    setPassword,
 }

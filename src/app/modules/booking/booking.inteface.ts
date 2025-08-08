@@ -15,6 +15,7 @@ import { Types } from "mongoose";
     tour: Types.ObjectId,
     payment?: Types.ObjectId,
     guestCount: number,
-    status: BOOKINFG_STATUS
+    status: BOOKINFG_STATUS,
+    createdAt?: Date
 
  }

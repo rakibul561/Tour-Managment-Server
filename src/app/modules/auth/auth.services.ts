@@ -161,11 +161,10 @@ const setPassword = async (userId: string, plainPassword: string) => {
 
   await user.save();
 };
-const changePassword = async (
-  oldPassword: string,
-  newPassword: string,
-  decodedToken: JwtPayload
-) => {
+const changePassword = async (  oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
+
+
+  
   const user = await User.findById(decodedToken.userId);
 
   const isOldPasswordMatch = await bcryptjs.compare(
